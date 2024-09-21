@@ -449,3 +449,79 @@ var lineGenerator = d3.line()
 curve types: 
 - pass through the points: (`curveLinear`, `curveCardinal`, `curveCatmullRom`, `curveMonotone`, `curveNatural` and `curveStep`) 
 - don't pass the points: (`curveBasis` and `curveBundle`).
+
+#### render to canvas
+
+By default the shape generators output SVG path data. However they can be configured to draw to a canvas element using the `.context()` function:
+```js
+var context = d3.select('canvas').node().getContext('2d');
+
+lineGenerator.context(context);
+
+context.strokeStyle = '#999';
+context.beginPath();
+lineGenerator(points);
+context.stroke();
+```
+
+#### Radial line
+
+极坐标系line generator
+```js
+var radialLineGenerator = d3.radialLine();
+
+// [angle, radius]
+var points = [
+	[0, 80],
+	[Math.PI * 0.25, 80],
+	[Math.PI * 0.5, 30],
+	[Math.PI * 0.75, 80],
+	[Math.PI, 80],
+	[Math.PI * 1.25, 80],
+	[Math.PI * 1.5, 80],
+	[Math.PI * 1.75, 80],
+	[Math.PI * 2, 80]
+];
+
+var radialLine = radialLineGenerator(points);
+
+d3.select('g')
+	.append('path')
+	.attr('d', radialLine);
+```
+
+![](assets/Pasted%20image%2020240921191045.png)
+
+can also use `.angle()` & `.radius()`
+
+```js
+var points = [
+
+  { a: 0, r: 80 },
+
+  { a: Math.PI * 0.25, r: 80 },
+
+  { a: Math.PI * 0.5, r: 30 },
+
+  { a: Math.PI * 0.75, r: 80 },
+
+  ...
+
+];
+
+  
+
+radialLineGenerator
+
+  .angle(function (d) {
+
+    return d.a;
+
+  })
+
+  .radius(function (d) {
+    return d.r;
+  });
+
+var pathData = radialLineGenerator(points);
+```
