@@ -496,32 +496,79 @@ can also use `.angle()` & `.radius()`
 
 ```js
 var points = [
-
   { a: 0, r: 80 },
-
   { a: Math.PI * 0.25, r: 80 },
-
   { a: Math.PI * 0.5, r: 30 },
-
   { a: Math.PI * 0.75, r: 80 },
-
   ...
-
 ];
 
-  
-
 radialLineGenerator
-
   .angle(function (d) {
-
     return d.a;
-
   })
-
   .radius(function (d) {
     return d.r;
   });
 
 var pathData = radialLineGenerator(points);
 ```
+
+#### area generator
+
+generates the area **between `y=0` and a multi-segment line** defined by an array of points:
+
+```js
+var areaGenerator = d3.area();
+
+var points = [
+  [0, 80],
+  [100, 100],
+  [200, 30],
+  [300, 50],
+  [400, 40],
+  [500, 80],
+];
+
+var pathData = areaGenerator(points);
+```
+
+configure the baseline using the `.y0` method:
+```js
+areaGenerator.y0(150);
+```
+
+You can also pass accessor functions into the `.y0` and `.y1` methods:
+
+```js
+var yScale = d3.scaleLinear().domain([0, 100]).range([200, 0]);
+
+var points = [
+	{x: 0, low: 30, high: 80},
+	{x: 100, low: 80, high: 100},
+	{x: 200, low: 20, high: 30},
+	{x: 300, low: 20, high: 50},
+	{x: 400, low: 10, high: 40},
+	{x: 500, low: 50, high: 80}
+];
+
+var areaGenerator = d3.area()
+	.x(function(d) {
+		return d.x;
+	})
+	.y0(function(d) {
+		return yScale(d.low);
+	})
+	.y1(function(d) {
+		return yScale(d.high);
+	});
+
+var area = areaGenerator(points);
+
+// Create a path element and set its d attribute
+d3.select('g')
+	.append('path')
+	.attr('d', area);
+  
+```
+
