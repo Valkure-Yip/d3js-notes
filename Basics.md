@@ -313,3 +313,139 @@ linearScale.invert(50);   // returns 5
 linearScale.invert(100);  // returns 10
 ```
 
+### continuous input & discrete output
+
+#### scaleQunatize
+```js
+let quantizeScale = d3.scaleQuantize()  
+	.domain([0, 100])  
+	.range(['lightblue', 'orange', 'lightgreen', 'pink']);
+	
+quantizeScale(10);  // returns 'lightblue'
+quantizeScale(30);  // returns 'orange'
+quantizeScale(90);  // returns 'pink'
+```
+
+![](assets/Pasted%20image%2020240920183017.png)
+
+#### scaleQuantile
+The domain is defined by **an array of numbers**
+```js
+let myData = [0, 5, 7, 10, 20, 30, 35, 40, 60, 62, 65, 70, 80, 90, 100];
+
+let quantileScale = d3.scaleQuantile()  
+	.domain(myData)  
+	.range(['lightblue', 'orange', 'lightgreen']);
+	
+quantileScale(0);   // returns 'lightblue'
+quantileScale(20);  // returns 'lightblue'
+quantileScale(30);  // returns 'orange'
+quantileScale(65);  // returns 'lightgreen'
+```
+
+![](assets/Pasted%20image%2020240920183027.png)
+#### scaleThreshold
+https://www.d3indepth.com/scales/#scalethreshold
+
+```js
+let thresholdScale = d3.scaleThreshold()  
+	.domain([0, 50, 100])  
+	.range(['#ccc', 'lightblue', 'orange', '#ccc']);
+	
+thresholdScale(-10);  // returns '#ccc'
+thresholdScale(20);   // returns 'lightblue'
+thresholdScale(70);   // returns 'orange'
+thresholdScale(110);  // returns '#ccc'
+```
+
+![](assets/Pasted%20image%2020240920183124.png)
+
+### discrete input & output
+
+#### scaleOrdinal
+
+#### scaleBand
+
+#### scalePoint
+
+### shapes
+
+The shapes in the above examples are made up of **SVG `path` elements.** Each of them has a **`d` attribute (path data)** which defines the shape of the path.
+
+|                                                            |                                                                                      |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [line](https://www.d3indepth.com/shapes/#line-generator)   | Generates path data for a multi-segment line (typically for line charts)             |
+| [area](https://www.d3indepth.com/shapes/#area-generator)   | Generates path data for an area (typically for stacked line charts and streamgraphs) |
+| [stack](https://www.d3indepth.com/shapes/#stack-generator) | Generates stack data from multi-series data                                          |
+| [arc](https://www.d3indepth.com/shapes/#arc-generator)     | Generates path data for an arc (typically for pie charts)                            |
+| [pie](https://www.d3indepth.com/shapes/#pie-generator)     | Generates pie angle data from array of data                                          |
+| [symbol](https://www.d3indepth.com/shapes/#symbols)        | Generates path data for symbols such as plus, star, diamond                          |
+#### line generator
+
+```js
+var lineGenerator = d3.line();
+
+var points = [];
+for(var i = 0; i < 200; i++)
+	points.push([ i * 3, Math.random() * 100 ]);
+
+// generate line chart
+var pathData = lineGenerator(points);
+
+d3.select('path')
+	.attr('d', pathData);
+```
+
+**.x, .y methods**: specify how the line generator interprets each array element using the methods `.x` and `.y`.
+
+```js
+var xScale = d3.scaleLinear().domain([0, 6]).range([0, 600]);
+var yScale = d3.scaleLinear().domain([0, 80]).range([150, 0]);
+
+// use .x, .y to handle x y seperately
+var lineGenerator = d3.line()
+	.x(function(d, i) {
+		return xScale(i);
+	})
+	.y(function(d) {
+		return yScale(d.value);
+	});
+
+var data = [
+	{value: 10}, 
+	{value: 50}, 
+	{value: 30}, 
+	{value: 40}, 
+	{value: 20}, 
+	{value: 70},
+	{value: 50}
+];
+
+var line = lineGenerator(data);
+
+// Create a path element and set its d attribute
+d3.select('g')
+	.append('path')
+	.attr('d', line);
+```
+
+**.defined()** configure the behaviour when there's **missing data**
+
+```js
+// leaves a gap where data is missing
+var lineGenerator = d3.line()
+	.defined(function(d) {
+		return d !== null;
+	});
+```
+
+**.curve()**
+平滑插值
+```js
+var lineGenerator = d3.line()  
+	.curve(d3.curveCardinal);
+```
+
+curve types: 
+- pass through the points: (`curveLinear`, `curveCardinal`, `curveCatmullRom`, `curveMonotone`, `curveNatural` and `curveStep`) 
+- don't pass the points: (`curveBasis` and `curveBundle`).
