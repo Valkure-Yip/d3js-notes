@@ -612,3 +612,60 @@ d3.select('g')
 
 ### stack generator
 
+ Each array contains **lower and upper values** for each data point. The lower and upper values are computed so that each series is stacked on top of the previous series.
+```js
+var colors = ['#FBB65B', '#513551', '#de3163'];
+
+var data = [
+  {day: 'Mon', apricots: 120, blueberries: 180, cherries: 100},
+  {day: 'Tue', apricots: 60, blueberries: 185, cherries: 105},
+  {day: 'Wed', apricots: 100, blueberries: 215, cherries: 110},
+  {day: 'Thu', apricots: 80, blueberries: 230, cherries: 105},
+  {day: 'Fri', apricots: 120, blueberries: 240, cherries: 105}
+];
+
+// stack generator
+var stack = d3.stack()
+  .keys(['apricots', 'blueberries', 'cherries']);
+
+var stackedSeries = stack(data);
+
+// stackedSeries = [
+//   [ [0, 120],   [0, 60],   [0, 100],    [0, 80],    [0, 120] ],   // Apricots
+//   [ [120, 300], [60, 245], [100, 315],  [80, 310],  [120, 360] ], // Blueberries
+//   [ [300, 400], [245, 350], [315, 425], [310, 415], [360, 465] ]  // Cherries
+// ]
+
+// stacked bar charts
+// Create a g element for each series
+var g = d3.select('g')
+	.selectAll('g.series')
+	.data(stackedSeries)
+	.enter()
+	.append('g')
+	.classed('series', true)
+	.style('fill', function(d, i) {
+		return colors[i];
+	});
+
+// For each series create a rect element for each day
+g.selectAll('rect')
+	.data(function(d) {
+		return d;
+	})
+	.join('rect')
+	.attr('width', function(d) {
+		return d[1] - d[0];
+	})
+	.attr('x', function(d) {
+		return d[0];
+	})
+	.attr('y', function(d, i) {
+		return i * 20;
+	})
+	.attr('height', 19);
+  
+```
+
+![](assets/Pasted%20image%2020240921202703.png)
+
