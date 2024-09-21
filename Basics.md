@@ -368,7 +368,7 @@ thresholdScale(110);  // returns '#ccc'
 
 #### scalePoint
 
-### shapes
+## shapes
 
 The shapes in the above examples are made up of **SVG `path` elements.** Each of them has a **`d` attribute (path data)** which defines the shape of the path.
 
@@ -380,7 +380,7 @@ The shapes in the above examples are made up of **SVG `path` elements.** Each 
 | [arc](https://www.d3indepth.com/shapes/#arc-generator)     | Generates path data for an arc (typically for pie charts)                            |
 | [pie](https://www.d3indepth.com/shapes/#pie-generator)     | Generates pie angle data from array of data                                          |
 | [symbol](https://www.d3indepth.com/shapes/#symbols)        | Generates path data for symbols such as plus, star, diamond                          |
-#### line generator
+### line generator
 
 ```js
 var lineGenerator = d3.line();
@@ -450,7 +450,7 @@ curve types:
 - pass through the points: (`curveLinear`, `curveCardinal`, `curveCatmullRom`, `curveMonotone`, `curveNatural` and `curveStep`) 
 - don't pass the points: (`curveBasis` and `curveBundle`).
 
-#### render to canvas
+### render to canvas
 
 By default the shape generators output SVG path data. However they can be configured to draw to a canvas element using the `.context()` function:
 ```js
@@ -464,7 +464,7 @@ lineGenerator(points);
 context.stroke();
 ```
 
-#### Radial line
+### Radial line
 
 极坐标系line generator
 ```js
@@ -514,7 +514,7 @@ radialLineGenerator
 var pathData = radialLineGenerator(points);
 ```
 
-#### area generator
+### area generator
 
 generates the area **between `y=0` and a multi-segment line** defined by an array of points:
 
@@ -539,7 +539,6 @@ areaGenerator.y0(150);
 ```
 
 You can also pass accessor functions into the `.y0` and `.y1` methods:
-
 ```js
 var yScale = d3.scaleLinear().domain([0, 100]).range([200, 0]);
 
@@ -571,4 +570,45 @@ d3.select('g')
 	.attr('d', area);
   
 ```
+
+![](assets/Pasted%20image%2020240921193543.png)
+
+### radial area
+
+极坐标area
+```js
+var radialAreaGenerator = d3.radialArea()
+	.angle(function(d) {
+		return d.angle;
+	})
+	.innerRadius(function(d) {
+		return d.r0;
+	})
+	.outerRadius(function(d) {
+		return d.r1;
+	});
+
+var points = [
+	{angle: 0, r0: 20, r1: 80},
+	{angle: Math.PI * 0.25, r0: 20, r1: 40},
+	{angle: Math.PI * 0.5, r0: 20, r1: 80},
+	{angle: Math.PI * 0.75, r0: 20, r1: 40},
+	{angle: Math.PI, r0: 20, r1: 80},
+	{angle: Math.PI * 1.25, r0: 20, r1: 40},
+	{angle: Math.PI * 1.5, r0: 20, r1: 80},
+	{angle: Math.PI * 1.75, r0: 20, r1: 40},
+	{angle: Math.PI * 2, r0: 20, r1: 80}
+];
+
+var pathData = radialAreaGenerator(points);
+
+// Create a path element and set its d attribute
+d3.select('g')
+	.append('path')
+	.attr('d', pathData);
+```
+
+![](assets/Pasted%20image%2020240921193837.png)
+
+### stack generator
 
