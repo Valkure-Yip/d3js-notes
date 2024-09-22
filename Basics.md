@@ -730,3 +730,54 @@ d3.select('g')
 
 ### arc generator
 
+```js
+var pieGenerator = d3.pie()
+	.value(function(d) {return d.quantity;})
+	.sort(function(a, b) {
+		return a.name.localeCompare(b.name);
+	});
+
+var fruits = [
+	{name: 'Apples', quantity: 20},
+	{name: 'Bananas', quantity: 40},
+	{name: 'Cherries', quantity: 50},
+	{name: 'Damsons', quantity: 10},
+	{name: 'Elderberries', quantity: 30},
+];
+
+// Create an arc generator with configuration
+var arcGenerator = d3.arc()
+	.innerRadius(20)
+	.outerRadius(100);
+
+var arcData = pieGenerator(fruits);
+
+// Create a path element and set its d attribute
+d3.select('g')
+	.selectAll('path')
+	.data(arcData)
+	.join('path')
+	.attr('d', arcGenerator);
+
+
+// Labels
+d3.select('g')
+	.selectAll('text')
+	.data(arcData)
+	.join('text')
+	.each(function(d) {
+		var centroid = arcGenerator.centroid(d);
+		d3.select(this)
+			.attr('x', centroid[0])
+			.attr('y', centroid[1])
+			.attr('dy', '0.33em')
+			.text(d.data.name);
+	});
+
+```
+
+![](assets/Pasted%20image%2020240922202741.png)
+
+## Axes
+
+
