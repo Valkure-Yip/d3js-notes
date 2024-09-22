@@ -669,3 +669,64 @@ g.selectAll('rect')
 
 ![](assets/Pasted%20image%2020240921202703.png)
 
+stacked line charts:
+```js
+
+var yScale = d3.scaleLinear().domain([0, 600]).range([200, 0]);
+
+var areaGenerator = d3.area()
+	.x(function(d, i) {
+		return i * 100;
+	})
+	.y0(function(d) {
+		return yScale(d[0]);
+	})
+	.y1(function(d) {
+		return yScale(d[1]);
+	});
+
+var colors = ['#FBB65B', '#513551', '#de3163'];
+
+var data = [
+	{day: 'Mon', apricots: 120, blueberries: 180, cherries: 100},
+	{day: 'Tue', apricots: 60, blueberries: 185, cherries: 105},
+	{day: 'Wed', apricots: 100, blueberries: 215, cherries: 110},
+	{day: 'Thu', apricots: 80, blueberries: 230, cherries: 105},
+	{day: 'Fri', apricots: 120, blueberries: 240, cherries: 105}
+];
+
+var stack = d3.stack()
+	.keys(['apricots', 'blueberries', 'cherries']);
+
+var stackedSeries = stack(data);
+
+d3.select('g')
+	.selectAll('path')
+	.data(stackedSeries)
+	.join('path')
+	.style('fill', function(d, i) {
+		return colors[i];
+	})
+	.attr('d', areaGenerator) // passed a shape generator instead of SVG
+```
+
+**stack.order()**
+
+|                      |                                                        |
+| -------------------- | ------------------------------------------------------ |
+| stackOrderNone       | (Default) Series in same order as specified in .keys() |
+| stackOrderAscending  | Smallest series at the bottom                          |
+| stackOrderDescending | Largest series at the bottom                           |
+| stackOrderInsideOut  | Largest series in the middle                           |
+| stackOrderReverse    | Reverse of stackOrderNone                              |
+**stack.offset()**
+  
+|   |   |
+|---|---|
+|stackOffsetNone|(Default) No offset|
+|stackOffsetExpand|Sum of series is normalised (to a value of 1)|
+|stackOffsetSilhouette|Center of stacks is at y=0|
+|stackOffsetWiggle|Wiggle of layers is minimised (typically used for streamgraphs)|
+
+### arc generator
+
