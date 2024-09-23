@@ -850,3 +850,35 @@ d3.select('svg g')
 
 `scaleLinear`, `scaleSqrt`, `scaleLog`, `scaleTime`, `scaleBand` and `scalePoint`.
 
+### transition
+
+update by `.call(axis)` again
+call `.transition` for axis animation
+```js
+d3.select('svg g')  
+	.transition()  
+	.call(axis);
+```
+
+### configuration
+
+#### .ticks()
+number of ticks
+```js
+let scale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
+let axis = d3.axisBottom(scale);
+axis.ticks(20); // 20 ticks
+d3.select('svg g')  
+	.call(axis);
+```
+
+#### .tickValues
+specify axis's tick value
+```js
+let scale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
+let axis = d3.axisBottom(scale);
+axis.tickValues([0, 25, 50, 75, 100]); // 5 tic
+d3.select('svg g')  
+	.call(axis);
+```
+
