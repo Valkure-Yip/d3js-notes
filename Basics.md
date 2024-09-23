@@ -780,4 +780,18 @@ d3.select('g')
 
 ## Axes
 
+You need two things to create a D3 axis:
+- an SVG element to contain the axis (usually a `g` element)
+- a D3 [scale function](https://www.d3indepth.com/scales)
 
+To create an axis:
+- make an axis generator function using `d3.axisBottom`, `d3.axisTop`, `d3.axisLeft` or `d3.axisRight` (and pass in your scale function)
+- select the container element and pass the axis generator into `.call`
+```js
+let scale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
+
+let axis = d3.axisBottom(scale);
+
+d3.select('svg g')
+	.call(axis);
+```
