@@ -845,3 +845,8 @@ d3.select('svg g')
 ### orientation
 
 `d3.axisBottom`, `d3.axisTop`, `d3.axisLeft` and `d3.axisRight`
+
+### scale types
+
+`scaleLinear`, `scaleSqrt`, `scaleLog`, `scaleTime`, `scaleBand` and `scalePoint`.
+
