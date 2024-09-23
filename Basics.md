@@ -78,6 +78,38 @@ d3.selectAll('circle')
 	.remove();
 ```
 
+### .each()
+The `.each` method lets you call a function for **each element of a selection**.
+```js
+d3.selectAll('circle')  
+	.each(function(d, i) {    
+		var odd = i % 2 === 1;    
+		
+		d3.select(this)      
+		.style('fill', odd ? 'orange' : '#ddd')      
+		.attr('r', odd ? 40 : 20);  
+});
+```
+
+![](assets/Pasted%20image%2020240923180945.png)
+### .call()
+The `.call` method allows a function to be called into which the **selection itself** is passed as the first argument
+```js
+function colorAll(selection) {  
+	selection    
+		.style('fill', 'orange');
+}
+
+d3.selectAll('circle')  
+	.call(colorAll);
+```
+
+### .filter()
+
+
+
+
+
 ## join data
 
 array of data --- selection of html or svg
