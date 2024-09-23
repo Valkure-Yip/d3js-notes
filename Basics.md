@@ -914,3 +914,7 @@ let axis = d3.axisBottom(scale)
 	.tickSize(50);
 ```
 ![](assets/Pasted%20image%2020240923212320.png)
+
+tickSizeOuter, tickSizeInner
+
+## Hierarchies
