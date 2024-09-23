@@ -872,13 +872,45 @@ d3.select('svg g')
 	.call(axis);
 ```
 
+D3 tries to use as many ticks as requested, but in some cases it'll use **more or less** in order for the tick values to be **round numbers**.
 #### .tickValues
 specify axis's tick value
 ```js
 let scale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
 let axis = d3.axisBottom(scale);
-axis.tickValues([0, 25, 50, 75, 100]); // 5 tic
+axis.tickValues([0, 25, 50, 75, 100]); // 5 ticks, value as specified
 d3.select('svg g')  
 	.call(axis);
 ```
 
+#### tick label formatting
+
+pass in a format string as the second argument
+```js
+axis.ticks(4, "$.2f")
+```
+![](assets/Pasted%20image%2020240923211917.png)
+
+or pass a formatting function into the `.tickFormat` method
+```js
+let scale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
+let axis = d3.axisBottom(scale);
+axis.ticks(4)  
+	.tickFormat(function(d) {    
+		return d + "%";  
+	});
+d3.select('svg g')  
+	.call(axis);
+```
+![](assets/Pasted%20image%2020240923211931.png)
+
+#### tick size
+`tickSize()`: 刻度高度
+`tickPadding()`: 刻度文字到刻线距离
+
+```js
+let axis = d3.axisBottom(scale)
+	.tickPadding(25)
+	.tickSize(50);
+```
+![](assets/Pasted%20image%2020240923212320.png)
