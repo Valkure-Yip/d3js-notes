@@ -842,4 +842,6 @@ d3.select('svg g')
 	.call(axis);
 ```
 
+### orientation
 
+`d3.axisBottom`, `d3.axisTop`, `d3.axisLeft` and `d3.axisRight`
