@@ -103,9 +103,16 @@ function colorAll(selection) {
 d3.selectAll('circle')  
 	.call(colorAll);
 ```
-
+![](assets/Pasted%20image%2020240923182004.png)
 ### .filter()
-
+```js
+d3.selectAll('circle')  
+	.filter(function(d, i) {    
+		return i % 2 === 0;  
+	})  
+	.style('fill', 'orange');
+```
+![](assets/Pasted%20image%2020240923182039.png)
 
 
 
@@ -819,6 +826,13 @@ You need two things to create a D3 axis:
 To create an axis:
 - make an axis generator function using `d3.axisBottom`, `d3.axisTop`, `d3.axisLeft` or `d3.axisRight` (and pass in your scale function)
 - select the container element and pass the axis generator into `.call`
+
+```html
+<svg width="600" height="100">  
+	<g transform="translate(20, 50)"></g>
+</svg>
+```
+
 ```js
 let scale = d3.scaleLinear().domain([0, 100]).range([0, 500]);
 
@@ -827,3 +841,5 @@ let axis = d3.axisBottom(scale);
 d3.select('svg g')
 	.call(axis);
 ```
+
+
